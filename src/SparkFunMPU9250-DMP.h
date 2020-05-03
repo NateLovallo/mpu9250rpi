@@ -18,14 +18,12 @@ Supported Platforms:
 #ifndef _SPARKFUN_MPU9250_DMP_H_
 #define _SPARKFUN_MPU9250_DMP_H_
 
-#include <Wire.h>
-#include <Arduino.h>
 
 // Optimally, these defines would be passed as compiler options, but Arduino
 // doesn't give us a great way to do that.
-#define MPU9250
-#define AK8963_SECONDARY
-#define COMPASS_ENABLED
+//#define MPU9250
+//#define AK8963_SECONDARY
+//#define COMPASS_ENABLED
 
 // Include the Invensense MPU9250 driver and DMP keys:
 extern "C" {

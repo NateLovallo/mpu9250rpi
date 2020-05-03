@@ -17,6 +17,7 @@ Supported Platforms:
 ******************************************************************************/
 #include "SparkFunMPU9250-DMP.h"
 #include "MPU9250_RegisterMap.h"
+#include "ArduinoCrap.h"
 
 extern "C" {
 #include "util/inv_mpu.h"
@@ -41,7 +42,7 @@ inv_error_t MPU9250_DMP::begin(void)
 	inv_error_t result;
     struct int_param_s int_param;
 	
-	Wire.begin();
+	i2c_init();
 	
 	result = mpu_init(&int_param);
 	

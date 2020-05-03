@@ -36,7 +36,7 @@
  * fabsf(float x)
  * min(int a, int b)
  */
-#include <Arduino.h>
+//#include <Arduino.h>
 #define MPU9250
 #include "arduino_mpu9250_i2c.h"
 #include "arduino_mpu9250_clk.h"
@@ -44,8 +44,9 @@
 #define i2c_read(a, b, c, d)  arduino_i2c_read(a, b, c, d)
 #define delay_ms  arduino_delay_ms
 #define get_ms    arduino_get_clock_ms
-#define log_i     _MLPrintLog
-#define log_e     _MLPrintLog 
+#define log_i     printf
+#define log_e     printf 
+#define min(a, b)   ((a<b)?(a):(b))
 static inline int reg_int_cb(struct int_param_s *int_param)
 {
 	
@@ -718,6 +719,12 @@ int mpu_init(struct int_param_s *int_param)
         return -1;
 #endif
 
+    if (i2c_read(st.hw->addr, st.reg->who_am_i, 1, data))
+        return -1;
+    {
+        log_e("who am i? i am 0x%x\n", data[0]);
+    }
+
     mpu_set_sensors(0);
     return 0;
 }
@@ -877,12 +884,20 @@ int mpu_get_temperature(long *data, unsigned long *timestamp)
 
     if (i2c_read(st.hw->addr, st.reg->temp, 2, tmp))
         return -1;
-    raw = (tmp[0] << 8) | tmp[1];
+    raw = (tmp[1] << 8) | tmp[0];
+    //raw = (tmp[0] << 8) | tmp[1];
+    
+    
+    
+    
     if (timestamp)
         get_ms(timestamp);
 
-    data[0] = (long)((35 + ((raw - (float)st.hw->temp_offset) / st.hw->temp_sens)) * 65536L);
+    data[0] = (long)((35 + (((float)raw - (float)st.hw->temp_offset) / (float)st.hw->temp_sens)) * 65536L);
+    
+    log_e("RAW %d 0x%x 0x%x %d %d\n", raw, tmp[1], tmp[0], st.hw->temp_offset, st.hw->temp_sens);
     return 0;
+    
 }
 
 /**

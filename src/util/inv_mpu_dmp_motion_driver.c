@@ -23,6 +23,7 @@
 #include "inv_mpu_dmp_motion_driver.h"
 #include "dmpKey.h"
 #include "dmpmap.h"
+#include <unistd.h>
 
 /* The following functions must be defined for this platform:
  * i2c_write(unsigned char slave_addr, unsigned char reg_addr,
@@ -32,7 +33,7 @@
  * delay_ms(unsigned long num_ms)
  * get_ms(unsigned long *count)
  */
-#include <Arduino.h>
+//#include <Arduino.h>
 #include "arduino_mpu9250_i2c.h"
 #include "arduino_mpu9250_clk.h"
 #define i2c_write(a, b, c, d) arduino_i2c_write(a, b, c, d)
@@ -602,7 +603,8 @@ int dmp_set_accel_bias(long *bias)
 
     mpu_get_accel_sens(&accel_sens);
     accel_sf = (long long)accel_sens << 15;
-    __no_operation();
+    //__no_operation();
+    usleep(1);
 
     accel_bias_body[0] = bias[dmp.orient & 3];
     if (dmp.orient & 4)
