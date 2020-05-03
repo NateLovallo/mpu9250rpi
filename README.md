@@ -1,4 +1,4 @@
-This is a fork of Sparkfun's Arduino library for the MPU9250 IMU
+This is a fork of Sparkfun's Arduino library for the MPU9250 IMU, ported to the Raspberry Pi using CMAKE and libi2c
 
 It doesn't work yet
 
