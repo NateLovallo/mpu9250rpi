@@ -33,15 +33,13 @@
  * delay_ms(unsigned long num_ms)
  * get_ms(unsigned long *count)
  */
-//#include <Arduino.h>
-#include "arduino_mpu9250_i2c.h"
-#include "arduino_mpu9250_clk.h"
-#define i2c_write(a, b, c, d) arduino_i2c_write(a, b, c, d)
-#define i2c_read(a, b, c, d)  arduino_i2c_read(a, b, c, d)
-#define delay_ms  arduino_delay_ms
-#define get_ms    arduino_get_clock_ms
-#define log_i     _MLPrintLog
-#define log_e     _MLPrintLog
+#include "rpi_porting.h"
+#define i2c_write(a, b, c, d) rpi_i2c_write(a, b, c, d)
+#define i2c_read(a, b, c, d)  rpi_i2c_read(a, b, c, d)
+#define delay_ms  rpi_delay_ms
+#define get_ms    rpi_get_clock_ms
+#define log_i     printf
+#define log_e     printf
 
 /* These defines are copied from dmpDefaultMPU6050.c in the general MPL
  * releases. These defines may change for each DMP image, so be sure to modify

@@ -1,4 +1,5 @@
 This is a fork of Sparkfun's Arduino library for the MPU9250 IMU
+https://github.com/sparkfun/SparkFun_MPU-9250-DMP_Arduino_Library
 
 I am attempting to port it to the Raspberry Pi as a static library using CMAKE
 

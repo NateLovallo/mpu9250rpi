@@ -1,21 +1,4 @@
-/******************************************************************************
-arduino_mpu9250_i2c.cpp - MPU-9250 Digital Motion Processor Arduino Library 
-Jim Lindblom @ SparkFun Electronics
-original creation date: November 23, 2016
-https://github.com/sparkfun/SparkFun_MPU9250_DMP_Arduino_Library
-
-This library implements motion processing functions of Invensense's MPU-9250.
-It is based on their Emedded MotionDriver 6.12 library.
-	https://www.invensense.com/developers/software-downloads/
-
-Development environment specifics:
-Arduino IDE 1.6.12
-SparkFun 9DoF Razor IMU M0
-
-Supported Platforms:
-- ATSAMD21 (Arduino Zero, SparkFun SAMD21 Breakouts)
-******************************************************************************/
-#include "arduino_mpu9250_i2c.h"
+#include "rpi_porting.h"
 #include <errno.h>
 #include <string.h>
 #include <stdio.h>
@@ -29,15 +12,26 @@ Supported Platforms:
 #include <assert.h>
 #include <i2c/smbus.h>
 #include <errno.h>
+#include <time.h>
+#include <stdarg.h>
 
-int i2c_init()
+// Based on log_stm32.c from Invensense motion_driver_6.12
+
+#define BUF_SIZE        (256)
+#define PACKET_LENGTH   (23)
+
+#define PACKET_DEBUG    (1)
+#define PACKET_QUAT     (2)
+#define PACKET_DATA     (3)
+
+int rpi_i2c_init()
 {
 
 	
 	return 0; 
 }
 
-int arduino_i2c_write(unsigned char slave_addr, unsigned char reg_addr,
+int rpi_i2c_write(unsigned char slave_addr, unsigned char reg_addr,
                        unsigned char length, unsigned char * data)
 {
 	int retval = 0;
@@ -76,7 +70,7 @@ int arduino_i2c_write(unsigned char slave_addr, unsigned char reg_addr,
 	return retval;
 }
 
-int arduino_i2c_read(unsigned char slave_addr, unsigned char reg_addr,
+int rpi_i2c_read(unsigned char slave_addr, unsigned char reg_addr,
                        unsigned char length, unsigned char * data)
 {
 	int retval = 0;
@@ -113,4 +107,37 @@ int arduino_i2c_read(unsigned char slave_addr, unsigned char reg_addr,
 	close(i2c_fd);
 			
 	return retval;
+}
+
+int rpi_get_clock_ms(unsigned long *count)
+{
+	struct timespec elapsed;
+	
+	int retval = clock_gettime(CLOCK_MONOTONIC, &elapsed);
+	
+	*count = (elapsed.tv_sec * 1000) + (elapsed.tv_nsec / 1000000);
+	return 0;
+}
+
+int rpi_delay_ms(unsigned long num_ms)
+{
+	usleep(num_ms*1000);
+	return 0;
+}
+
+void logString(char * string) 
+{
+}
+
+int _MLPrintLog (int priority, const char* tag, const char* fmt, ...)
+{
+	return 0;
+}
+
+void eMPL_send_quat(long *quat)
+{
+}
+
+void eMPL_send_data(unsigned char type, long *data)
+{
 }

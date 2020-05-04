@@ -23,7 +23,13 @@ int main(int argc, char* args[])
 		}
 		else
 		{
-			printf("t: %d \tax: %x \tay: %x \taz:%x\n", myDmp.temperature, myDmp.ax, myDmp.ay, myDmp.az);
+			printf(
+				"t: %d \tax: %x \tay: %x \taz:%x\n", 
+				myDmp.temperature, 
+				myDmp.ax, 
+				myDmp.ay, 
+				myDmp.az
+			);
 		}
 		usleep(1000*200);
 	}

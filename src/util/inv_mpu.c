@@ -38,12 +38,11 @@
  */
 //#include <Arduino.h>
 #define MPU9250
-#include "arduino_mpu9250_i2c.h"
-#include "arduino_mpu9250_clk.h"
-#define i2c_write(a, b, c, d) arduino_i2c_write(a, b, c, d)
-#define i2c_read(a, b, c, d)  arduino_i2c_read(a, b, c, d)
-#define delay_ms  arduino_delay_ms
-#define get_ms    arduino_get_clock_ms
+#include "rpi_porting.h"
+#define i2c_write(a, b, c, d) rpi_i2c_write(a, b, c, d)
+#define i2c_read(a, b, c, d)  rpi_i2c_read(a, b, c, d)
+#define delay_ms  rpi_delay_ms
+#define get_ms    rpi_get_clock_ms
 #define log_i     printf
 #define log_e     printf 
 #define min(a, b)   ((a<b)?(a):(b))
@@ -719,10 +718,11 @@ int mpu_init(struct int_param_s *int_param)
         return -1;
 #endif
 
-    if (i2c_read(st.hw->addr, st.reg->who_am_i, 1, data))
+    if (i2c_read(st.hw->addr, st.reg->who_am_i, 2, data))
         return -1;
     {
         log_e("who am i? i am 0x%x\n", data[0]);
+        log_e("register after whoami 0x%x\n", data[1]);
     }
 
     mpu_set_sensors(0);

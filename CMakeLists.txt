@@ -11,9 +11,7 @@ include_directories (src)
 
 set(LIBRARY_SOURCES
 "src/SparkFunMPU9250-DMP.cpp"
-"src/util/arduino_mpu9250_clk.c"
-"src/util/arduino_mpu9250_i2c.cpp"
-"src/util/arduino_mpu9250_log.cpp"
+"src/util/rpi_porting.c"
 "src/util/inv_mpu.c"
 "src/util/inv_mpu_dmp_motion_driver.c"
 )
