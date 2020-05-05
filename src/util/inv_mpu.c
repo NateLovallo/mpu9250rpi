@@ -720,12 +720,16 @@ int mpu_init(struct int_param_s *int_param)
 
     if (i2c_read(st.hw->addr, st.reg->who_am_i, 2, data))
         return -1;
+    else
     {
         log_e("who am i? i am 0x%x\n", data[0]);
-        log_e("register after whoami 0x%x\n", data[1]);
     }
 
-    mpu_set_sensors(0);
+    //data[0] = 0xF;
+    //data[1] = 0x5;
+    //if (i2c_read(st.hw->addr, st.reg->yg_offs_tc, 2, data))
+
+    //mpu_set_sensors(0);
     return 0;
 }
 
@@ -884,20 +888,15 @@ int mpu_get_temperature(long *data, unsigned long *timestamp)
 
     if (i2c_read(st.hw->addr, st.reg->temp, 2, tmp))
         return -1;
-    raw = (tmp[1] << 8) | tmp[0];
-    //raw = (tmp[0] << 8) | tmp[1];
-    
-    
-    
+
+    raw = (tmp[0] << 8) | tmp[1];
     
     if (timestamp)
-        get_ms(timestamp);
+       get_ms(timestamp);
 
-    data[0] = (long)((35 + (((float)raw - (float)st.hw->temp_offset) / (float)st.hw->temp_sens)) * 65536L);
-    
-    log_e("RAW %d 0x%x 0x%x %d %d\n", raw, tmp[1], tmp[0], st.hw->temp_offset, st.hw->temp_sens);
+    data[0] = (long)((35 + ((raw - (float)st.hw->temp_offset) / st.hw->temp_sens)) * 65536L);
+
     return 0;
-    
 }
 
 /**
