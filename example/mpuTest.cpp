@@ -32,7 +32,6 @@ int main(int argc, char* args[])
 
 			printf(
 				"ax: %d \tay: %d \taz:%d\n",
-				myDmp.temperature / (65536),
 				myDmp.ax,
 				myDmp.ay,
 				myDmp.az
@@ -40,7 +39,6 @@ int main(int argc, char* args[])
 
 			printf(
 				"gx: %d \tgy: %d \tgz:%d\n",
-				myDmp.temperature / (65536),
 				myDmp.gx,
 				myDmp.gy,
 				myDmp.gz
@@ -48,7 +46,6 @@ int main(int argc, char* args[])
 
 			printf(
 				"mx: %d \tmy: %d \tmz:%d\n",
-				myDmp.temperature / (65536),
 				myDmp.mx,
 				myDmp.my,
 				myDmp.mz
