@@ -42,13 +42,25 @@ public:
 		}
 		
 
-
 		SetAccelFsr();
+
+		SetSampleRate();
 
 		std::this_thread::sleep_for(100ms);
 
+   }
+
+	///////////////////////////////////////////////////////////////////////////////
+   ~Mpu9250()
+   {
+		close(mFd);
+   }
+
+	///////////////////////////////////////////////////////////////////////////////
+	void SampleAccelerometer()
+	{
 		unsigned char data[6] = {};
-		r = I2CRead(MPU9250_ACCEL_XOUT_H, 6, &ID);
+		int r = I2CRead(MPU9250_ACCEL_XOUT_H, 6, data);
 		assert(r == 0);
 		(void)0;
 
@@ -59,18 +71,30 @@ public:
 		fprintf(stderr, "Y \t%d \n", y);
 		fprintf(stderr, "Z \t%d \n", z);
 
-		r = I2CRead(MPU9250_TEMP_OUT_H, 2, &ID);
+		
+	}
+
+	///////////////////////////////////////////////////////////////////////////////
+	void SampleTemperature()
+	{
+		unsigned char data[2] = {};
+		int r = I2CRead(MPU9250_TEMP_OUT_H, 2, data);
 		assert(r == 0);
 		(void)0;
 		int temp = (data[0] << 8) | data[1];
-		fprintf(stderr, "Temp \t%d \n", temp);
-   }
 
-	///////////////////////////////////////////////////////////////////////////////
-   ~Mpu9250()
-   {
-		close(mFd);
-   }
+		// data sheet says TEMP_degC = ((TEMP_OUT – RoomTemp_Offset) / Temp_Sensitivity) + 21degC
+		// RoomTemp_Offset is not defined anywhere in reg map or data sheet
+		// TDK driver uses 0?
+		// TDK driver uses 321 for temp sens
+
+		temp = (temp - 0) / (321) + 21;
+
+		// dungarees frankenstein
+		temp = (temp * 9.0f / 5.0f) + 32.0f;
+
+		fprintf(stderr, "Temp \t%d \n", temp);
+	}
 
 	///////////////////////////////////////////////////////////////////////////////
 	void Reset()
@@ -100,14 +124,30 @@ public:
 	{
 		// TODO make configurable
 
-		unsigned char data = (01 << 3); // 4G
+		unsigned char data = (01 << 3); // 4G range
 		int r = I2CWrite(MPU9250_ACCEL_CONFIG, 1, &data);
+		assert(r == 0);
+		(void)r;
+
+		// Bypass filters
+		data = ACCEL_CONFIG_2_ACCEL_FCHOICE_B;
+		// 0 does bypass, but its inverted
+		r = I2CWrite(MPU9250_ACCEL_CONFIG_2, 1, &data);
 		assert(r == 0);
 		(void)r;
 	}
 
 	
+	///////////////////////////////////////////////////////////////////////////////
+	void SetSampleRate ()
+	{
+		// TODO make configurable
 
+		unsigned char data = 19; // 20 Mhz / (1 + 19)
+		int r = I2CWrite(MPU9250_SMPLRT_DIV, 1, &data);
+		assert(r == 0);
+		(void)r;
+	}
 
 private:
 

@@ -13,7 +13,14 @@ int main(int argc, char* args[])
 
 	Mpu9250 test;
 
-	usleep(1000 * 1000);
+	
+
+	while (1)
+	{
+		test.SampleAccelerometer();
+		test.SampleTemperature();
+		usleep(500 * 1000);
+	}
 
 
 	/*
