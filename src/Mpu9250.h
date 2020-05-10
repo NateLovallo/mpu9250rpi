@@ -67,9 +67,9 @@ public:
 		int x = (data[0] << 8) | data[1];
 		int y = (data[2] << 8) | data[3];
 		int z = (data[4] << 8) | data[5];
-		fprintf(stderr, "X \t%d \n", x);
-		fprintf(stderr, "Y \t%d \n", y);
-		fprintf(stderr, "Z \t%d \n", z);
+		fprintf(stderr, "X \t%d \t%f\n", x, x / 8192.0f);
+		fprintf(stderr, "Y \t%d \t%f\n", y, y / 8192.0f);
+		fprintf(stderr, "Z \t%d \t%f\n", z, z / 8192.0f);
 
 		
 	}
@@ -118,6 +118,35 @@ public:
 		assert(r == 0);
 		(void)r;
 	}
+
+	///////////////////////////////////////////////////////////////////////////////
+	void ResetSignalPath()
+	{
+		unsigned char data = 0x7;
+
+		int r = I2CWrite(MPU9250_SIGNAL_PATH_RESET, 1, &data);
+		assert(r == 0);
+		(void)r;
+
+		std::this_thread::sleep_for(100ms);
+
+		data = 0;
+
+		data = 0;
+		r = I2CWrite(MPU9250_SIGNAL_PATH_RESET, 1, &data);
+		assert(r == 0);
+		(void)r;
+
+
+		data = 1;
+		r = I2CWrite(MPU9250_USER_CTRL, 1, &data);
+		assert(r == 0);
+		(void)r;
+
+
+		std::this_thread::sleep_for(100ms);
+	}
+
 
 	///////////////////////////////////////////////////////////////////////////////
 	void SetAccelFsr()
