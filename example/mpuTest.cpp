@@ -4,10 +4,19 @@
 
 #include "SparkFunMPU9250-DMP.h"
 
+#include "Mpu9250.h"
+
 int main(int argc, char* args[])
 {
 	printf("test\n");
 
+
+	Mpu9250 test;
+
+	usleep(1000 * 1000);
+
+
+	/*
 	MPU9250_DMP myDmp;
 	
 	if (myDmp.begin() != INV_SUCCESS)
@@ -19,7 +28,7 @@ int main(int argc, char* args[])
 	
 	while (1)
 	{
-		if (myDmp.update(UPDATE_TEMP | UPDATE_ACCEL | UPDATE_GYRO | UPDATE_COMPASS)  != INV_SUCCESS)
+		if (myDmp.update(UPDATE_TEMP | UPDATE_ACCEL | UPDATE_GYRO | UPDATE_COMPASS) != INV_SUCCESS)
 		{
 			printf("couldnt update\n");
 		}
@@ -31,31 +40,27 @@ int main(int argc, char* args[])
 			);
 
 			printf(
-				"ax: %d \tay: %d \taz:%d\n",
-				myDmp.ax,
-				myDmp.ay,
-				myDmp.az
+				"ax: %f G \tay: %f G\taz:%f G\n",
+				myDmp.calcAccel(myDmp.ax),
+				myDmp.calcAccel(myDmp.ay),
+				myDmp.calcAccel(myDmp.az)
 			);
 
 			printf(
-				"gx: %d \tgy: %d \tgz:%d\n",
-				myDmp.gx,
-				myDmp.gy,
-				myDmp.gz
-			);
-
-			printf(
-				"mx: %d \tmy: %d \tmz:%d\n",
+				"mx: %d \tmy: %d \tmz:%d \t Heading: %f\n",
 				myDmp.mx,
 				myDmp.my,
-				myDmp.mz
+				myDmp.mz,
+				myDmp.computeCompassHeading()
 			);
+
+
 
 		}
 		usleep(1000*200);
 	}
 	
-	
+	*/
 	
 	return 0;
 }

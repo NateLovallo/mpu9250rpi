@@ -1,7 +1,4 @@
-/*
- */
-#ifndef _MPU9250_REGISTER_MAP_H_
-#define _MPU9250_REGISTER_MAP_H_
+#pragma once
 
 enum mpu9250_register {
 	MPU9250_SELF_TEST_X_GYRO =  0x00,
@@ -200,5 +197,3 @@ enum ak8963_register {
 #define AK8963_ST1_DRDY_BIT 0
 
 #define AK8963_WHO_AM_I_RESULT 0x48
-
-#endif // _MPU9250_REGISTER_MAP_H_
