@@ -15,29 +15,12 @@
 #include <time.h>
 #include <stdarg.h>
 
-// Based on log_stm32.c from Invensense motion_driver_6.12
-
-#define BUF_SIZE        (256)
-#define PACKET_LENGTH   (23)
-
-#define PACKET_DEBUG    (1)
-#define PACKET_QUAT     (2)
-#define PACKET_DATA     (3)
-
-///////////////////////////////////////////////////////////////////////////////
-int rpi_i2c_init()
-{
-
-	
-	return 0; 
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 int rpi_i2c_write(unsigned char slave_addr, unsigned char reg_addr,
                        unsigned char length, unsigned char * data)
 {
 	int retval = 0;
-	fprintf(stderr, "write \t%x \t%x \t%u\n", slave_addr, reg_addr, length);
+	fprintf(stderr, "write \t0x%x \t0x%x \t%u\n", slave_addr, reg_addr, length);
 	
 	unsigned char send_data[256+1] = {};
 
@@ -49,7 +32,7 @@ int rpi_i2c_write(unsigned char slave_addr, unsigned char reg_addr,
 	// All the messages in a write need to be sent in one packet with not start condition
 	// after the address
 	//
-	// So prepend the addr
+	// So prepend the address
 	// 
 	send_data[0] = reg_addr;
 
@@ -68,7 +51,7 @@ int rpi_i2c_write(unsigned char slave_addr, unsigned char reg_addr,
 
 	if (ioctl(i2c_fd, I2C_RDWR, &msgset) < 0)
 	{
-		fprintf(stderr, "Oh shit write %d %s\n", errno, strerror(errno));
+		fprintf(stderr, "Write Failure! %d %s\n", errno, strerror(errno));
 		retval = -1;
 	}
 	
@@ -109,7 +92,7 @@ int rpi_i2c_read(unsigned char slave_addr, unsigned char reg_addr,
 
 	if (ioctl(i2c_fd, I2C_RDWR, &msgset) < 0)
 	{
-		fprintf(stderr, "Oh shit read %d %s\n", errno, strerror(errno));
+		fprintf(stderr, "Read failure! %d %s\n", errno, strerror(errno));
 		retval = -1;
 	}
 
@@ -134,25 +117,4 @@ int rpi_delay_ms(unsigned long num_ms)
 {
 	usleep(num_ms*1000);
 	return 0;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void logString(char * string) 
-{
-}
-
-///////////////////////////////////////////////////////////////////////////////
-int _MLPrintLog (int priority, const char* tag, const char* fmt, ...)
-{
-	return 0;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void eMPL_send_quat(long *quat)
-{
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void eMPL_send_data(unsigned char type, long *data)
-{
 }

@@ -42,8 +42,6 @@ inv_error_t MPU9250_DMP::begin(void)
 	inv_error_t result;
     struct int_param_s int_param;
 	
-	rpi_i2c_init();
-	
 	result = mpu_init(&int_param);
 	
 	if (result)

@@ -4,32 +4,58 @@
 
 #include "SparkFunMPU9250-DMP.h"
 
-#include "Mpu9250.h"
-
 int main(int argc, char* args[])
 {
 	printf("test\n");
 
-
-	Mpu9250 test;
-
-	for (int i = 0; i < 10; i++)
+	MPU9250_DMP myDmp;
+	
+	if (myDmp.begin() != INV_SUCCESS)
 	{
-		test.SampleAccelerometer();
-		test.SampleTemperature();
-		usleep(500 * 1000);
+		printf("Oh no!\n");
 	}
 
-	printf("RESET-------------\n");
-	test.ResetSignalPath();
-
-	for (;;)
+	myDmp.setSensors(INV_XYZ_GYRO | INV_XYZ_ACCEL | INV_XYZ_COMPASS);
+	
+	while (1)
 	{
-		test.SampleAccelerometer();
-		test.SampleTemperature();
-		usleep(500 * 1000);
-	}
+		if (myDmp.update(UPDATE_TEMP | UPDATE_ACCEL | UPDATE_GYRO | UPDATE_COMPASS)  != INV_SUCCESS)
+		{
+			printf("couldnt update\n");
+		}
+		else
+		{
+			printf(
+				"t: %d\n", 
+				myDmp.temperature / (65536)
+			);
 
+			printf(
+				"ax: %d \tay: %d \taz:%d\n",
+				myDmp.ax,
+				myDmp.ay,
+				myDmp.az
+			);
+
+			printf(
+				"gx: %d \tgy: %d \tgz:%d\n",
+				myDmp.gx,
+				myDmp.gy,
+				myDmp.gz
+			);
+
+			printf(
+				"mx: %d \tmy: %d \tmz:%d\n",
+				myDmp.mx,
+				myDmp.my,
+				myDmp.mz
+			);
+
+		}
+		usleep(1000*200);
+	}
+	
+	
 	
 	return 0;
 }

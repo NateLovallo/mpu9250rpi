@@ -1,11 +1,15 @@
 This is a fork of Sparkfun's Arduino library for the MPU9250 IMU
 https://github.com/sparkfun/SparkFun_MPU-9250-DMP_Arduino_Library
 
-I am attempting to port it to the Raspberry Pi as a static library using CMAKE
+It's a port to the Raspberry Pi as a static library using CMAKE
 
-It doesn't work yet
+The I2C IO is handled using /dev/i2c-1
+Sleeps are handled by usleep()
+Time comes from clock_gettime(CLOCK_MONOTONIC,...)
+All logs go to printf
 
-The goal is to use /dev/i2c-1 for a simple user space driver with no interrupts
+I *think* it works, but it needs more formal testing
+Let me know if you find it useful
 
 To build:
 ```
@@ -23,4 +27,8 @@ To run test:
 ./mpuTest
 ```
 
-Ideally I want to figure out how to use IIO subsystem built into linux but the interrupts need to be figured out
+Dependencies:
+
+```
+sudo apt install libi2c-dev cmake ninja-build
+```

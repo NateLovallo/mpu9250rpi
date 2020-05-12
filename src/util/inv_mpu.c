@@ -725,11 +725,6 @@ int mpu_init(struct int_param_s *int_param)
         log_e("who am i? i am 0x%x\n", data[0]);
     }
 
-    //data[0] = 0xF;
-    //data[1] = 0x5;
-    //if (i2c_read(st.hw->addr, st.reg->yg_offs_tc, 2, data))
-
-    //mpu_set_sensors(0);
     return 0;
 }
 
